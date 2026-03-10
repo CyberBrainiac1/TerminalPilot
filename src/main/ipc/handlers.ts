@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, app } from 'electron';
+import { ipcMain, BrowserWindow, app, shell } from 'electron';
 import { PtyManager } from '../terminal/ptyManager';
 import { SSHManager } from '../ssh/sshManager';
 import { AIProvider } from '../ai/aiProvider';

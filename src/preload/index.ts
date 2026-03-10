@@ -15,8 +15,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
       ipcRenderer.invoke('terminal:getOutput', tabId, lines),
     clear: (tabId: string) =>
       ipcRenderer.invoke('terminal:clear', tabId),
-    onData: (callback: (tabId: string, data: string) => void) => {
-      ipcRenderer.on('terminal:data', (_, tabId, data) => callback(tabId, data));
+    onData: (tabId: string, callback: (data: string) => void) => {
+      const handler = (_: Electron.IpcRendererEvent, tid: string, data: string) => {
+        if (tid === tabId) callback(data);
+      };
+      ipcRenderer.on('terminal:data', handler);
+      return () => ipcRenderer.removeListener('terminal:data', handler);
     },
     onExit: (callback: (tabId: string, exitCode: number) => void) => {
       ipcRenderer.on('terminal:exit', (_, tabId, exitCode) => callback(tabId, exitCode));
