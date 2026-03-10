@@ -52,7 +52,7 @@ npm run make:win
 
 ### 🐧 Linux — bash / zsh
 
-**Option A — Download the pre-built AppImage (no build required):**
+**Download the pre-built AppImage (no build required):**
 
 ```bash
 # Install prerequisite (Debian/Ubuntu)
@@ -67,7 +67,7 @@ chmod +x TerminalPilot.AppImage
 ./TerminalPilot.AppImage
 ```
 
-**Option B — Build from source on Linux:**
+**Build from source on Linux:**
 
 ```bash
 # Prerequisites: Node.js 20+, Git, build tools
@@ -104,7 +104,7 @@ npm run make:linux
 
 ### 🍎 macOS — Terminal / iTerm2
 
-**Option A — Build from source on macOS:**
+**Build from source on macOS:**
 
 ```bash
 # Prerequisites: Node.js 20+, Git, Xcode Command Line Tools
