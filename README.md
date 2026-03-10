@@ -15,27 +15,18 @@ Pick your platform and paste the commands into your terminal.
 
 ### 🪟 Windows — PowerShell
 
-**Option A — Download the pre-built installer (no build required):**
+**Download the pre-built installer (no build required):**
 
 ```powershell
 # Download the NSIS installer for Windows x64
-curl -L -o TerminalPilot-Setup.exe `
-  https://github.com/CyberBrainiac1/TerminalPilot/releases/latest/download/TerminalPilot-AI-Setup-x64.exe
+Invoke-WebRequest -Uri "https://github.com/CyberBrainiac1/TerminalPilot/releases/latest/download/TerminalPilot-AI-Setup-x64.exe" `
+  -OutFile "TerminalPilot-Setup.exe"
 
 # Run the installer (installs to Program Files, creates Start Menu shortcut)
-.\TerminalPilot-Setup.exe
+Start-Process -FilePath ".\TerminalPilot-Setup.exe" -Wait
 ```
 
-**Option B — Download the portable build (no install, just run):**
-
-```powershell
-curl -L -o TerminalPilot-Portable.exe `
-  https://github.com/CyberBrainiac1/TerminalPilot/releases/latest/download/TerminalPilot-AI-Portable-x64.exe
-
-.\TerminalPilot-Portable.exe
-```
-
-**Option C — Build from source on Windows:**
+**Build from source on Windows:**
 
 ```powershell
 # Prerequisites: Node.js 20+, Git, Visual Studio Build Tools (C++ workload)
@@ -61,7 +52,7 @@ npm run make:win
 
 ### 🐧 Linux — bash / zsh
 
-**Option A — Download the pre-built AppImage (no build required):**
+**Download the pre-built AppImage (no build required):**
 
 ```bash
 # Install prerequisite (Debian/Ubuntu)
@@ -76,7 +67,7 @@ chmod +x TerminalPilot.AppImage
 ./TerminalPilot.AppImage
 ```
 
-**Option B — Build from source on Linux:**
+**Build from source on Linux:**
 
 ```bash
 # Prerequisites: Node.js 20+, Git, build tools
@@ -113,7 +104,7 @@ npm run make:linux
 
 ### 🍎 macOS — Terminal / iTerm2
 
-**Option A — Build from source on macOS:**
+**Build from source on macOS:**
 
 ```bash
 # Prerequisites: Node.js 20+, Git, Xcode Command Line Tools
