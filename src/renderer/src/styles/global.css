@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────
+   PowerShell-inspired color scheme
+   Primary blue: #012456  (classic Windows PowerShell)
+   Chrome blue:  #0c1f3d  (title bar / tabs)
+   Sidebar:      #0a1930  (slightly darker)
+   Accent:       #0078d4  (Windows blue)
+───────────────────────────────────────────────────── */
+:root {
+  --bg-primary:   #0c1f3d;
+  --bg-secondary: #012456;
+  --bg-tertiary:  #0a1930;
+  --bg-sidebar:   #071428;
+  --border-color: #1b4f8f;
+  --text-primary: #eeedf0;
+  --text-secondary: #c4c4cc;
+  --text-muted:   #7b94b5;
+  --accent:       #0078d4;
+  --accent-hover: #1490e8;
+  --success:      #4ec94e;
+  --warning:      #ffd659;
+  --error:        #f14f5c;
+  --tab-active:   #61afef;
+  --ps-blue:      #012456;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2b6cb0; }
+
+/* ── Terminal container ──────────────────────────────── */
+.terminal-container {
+  height: 100%;
+  width: 100%;
+  background: var(--bg-secondary);
+}
+.terminal-container .xterm {
+  height: 100%;
+  padding: 10px 12px;
+}
+.terminal-container .xterm-viewport { overflow-y: auto !important; }
+/* Allow text selection inside xterm */
+.terminal-container * { user-select: text; }
+
+/* ── Chat code block ─────────────────────────────────── */
+.chat-code-block {
+  background: #071428;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+  font-size: 13px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: #9cdcfe;
+}
+
+/* ── Resize handle ───────────────────────────────────── */
+.resize-handle {
+  width: 4px;
+  cursor: col-resize;
+  background: var(--border-color);
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.resize-handle:hover,
+.resize-handle.dragging {
+  background: var(--accent);
+}
