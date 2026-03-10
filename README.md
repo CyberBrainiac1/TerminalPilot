@@ -1,127 +1,213 @@
 # TerminalPilot AI
 
-> A standalone AI-powered desktop terminal — real PTY shell emulation, SSH support, and an integrated AI assistant with per-command approval.
+> A PowerShell-style desktop terminal with a built-in AI chat sidebar — real PTY shell emulation, SSH support, and per-command approval workflow.
 
-![TerminalPilot AI](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## Features
+---
 
-- **Real terminal emulator** — PTY-backed via `node-pty`, supports PowerShell, CMD, Git Bash, WSL, bash, zsh
-- **Multiple tabs** with shell profile switching
-- **SSH session management** — key/password/agent auth, saved profiles
-- **AI chat sidebar** — powered by OpenAI (extensible to other providers)
-- **Command proposal + approval** — AI suggests commands, you approve/edit/reject before they run
-- **Risk scanning** — color-coded risk levels (safe / moderate / high / critical) for dangerous commands
-- **Secret redaction** — API keys, tokens, and passwords are stripped before sending output to AI
-- **Secure API key storage** — OS keychain via `keytar`
-- **Tokyo Night dark theme** with xterm.js terminal rendering
-- **Settings UI** — fonts, scrollback, AI config, SSH profiles, keyboard shortcuts
+## ⚡ Quick Install (CLI)
 
-## Download
+Pick your platform and paste the commands into your terminal.
 
-Pre-built installers are available on the [Releases](../../releases) page:
+---
 
-| Platform | File |
-|----------|------|
-| Windows  | `TerminalPilot-AI-Setup-x64.exe` (NSIS installer) |
-| Windows  | `TerminalPilot-AI-Portable-x64.exe` (portable, no install needed) |
-| Linux    | `TerminalPilot-AI-x86_64.AppImage` |
+### 🪟 Windows — PowerShell
 
-> **Note:** Releases are built automatically by CI when a version tag is pushed. To trigger a release, push a tag like `v1.0.0`.
+**Option A — Download the pre-built installer (no build required):**
 
-## Build from Source
+```powershell
+# Download the NSIS installer for Windows x64
+curl -L -o TerminalPilot-Setup.exe `
+  https://github.com/CyberBrainiac1/TerminalPilot/releases/latest/download/TerminalPilot-AI-Setup-x64.exe
 
-### Prerequisites
+# Run the installer (installs to Program Files, creates Start Menu shortcut)
+.\TerminalPilot-Setup.exe
+```
 
-- Node.js 20+
-- Python 3 (for native module compilation)
-- On Windows: Visual Studio Build Tools (C++ workload)
-- On Linux: `build-essential libsecret-1-dev`
+**Option B — Download the portable build (no install, just run):**
 
-### Steps
+```powershell
+curl -L -o TerminalPilot-Portable.exe `
+  https://github.com/CyberBrainiac1/TerminalPilot/releases/latest/download/TerminalPilot-AI-Portable-x64.exe
+
+.\TerminalPilot-Portable.exe
+```
+
+**Option C — Build from source on Windows:**
+
+```powershell
+# Prerequisites: Node.js 20+, Git, Visual Studio Build Tools (C++ workload)
+# Check Node version first — must be 20 or newer:
+node --version
+
+# Clone the repository
+git clone https://github.com/CyberBrainiac1/TerminalPilot.git
+cd TerminalPilot
+
+# Install dependencies (--legacy-peer-deps required for native modules)
+npm install --legacy-peer-deps
+
+# Run in development mode (hot reload)
+npm run dev
+
+# — OR — build a distributable installer:
+npm run make:win
+# Output: dist\TerminalPilot-AI-Setup-x64.exe
+```
+
+---
+
+### 🐧 Linux — bash / zsh
+
+**Option A — Download the pre-built AppImage (no build required):**
 
 ```bash
-# Clone
+# Install prerequisite (Debian/Ubuntu)
+sudo apt-get install -y libsecret-1-0
+
+# Download the AppImage
+curl -L -o TerminalPilot.AppImage \
+  https://github.com/CyberBrainiac1/TerminalPilot/releases/latest/download/TerminalPilot-AI-x86_64.AppImage
+
+# Make it executable and run
+chmod +x TerminalPilot.AppImage
+./TerminalPilot.AppImage
+```
+
+**Option B — Build from source on Linux:**
+
+```bash
+# Prerequisites: Node.js 20+, Git, build tools
+# Debian / Ubuntu:
+sudo apt-get update && sudo apt-get install -y \
+  git curl build-essential python3 libsecret-1-dev
+
+# Fedora / RHEL:
+# sudo dnf install -y git curl gcc-c++ make python3 libsecret-devel
+
+# Install Node.js 20 via nvm (if not already installed):
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc          # reload shell (or open a new terminal)
+nvm install 20
+nvm use 20
+node --version            # should print v20.x.x
+
+# Clone the repository
 git clone https://github.com/CyberBrainiac1/TerminalPilot.git
 cd TerminalPilot
 
 # Install dependencies
 npm install --legacy-peer-deps
 
-# Development mode (hot reload)
+# Run in development mode (hot reload)
 npm run dev
 
-# Production build
-npm run build
-
-# Package (current platform)
-npm run make
-
-# Package Windows installer (run on Windows or via CI)
-npm run make:win
-
-# Package Linux AppImage
+# — OR — build a distributable AppImage:
 npm run make:linux
+# Output: dist/TerminalPilot-AI-x86_64.AppImage
 ```
 
-Packaged installers are output to the `dist/` directory.
+---
+
+### 🍎 macOS — Terminal / iTerm2
+
+**Option A — Build from source on macOS:**
+
+```bash
+# Prerequisites: Node.js 20+, Git, Xcode Command Line Tools
+xcode-select --install     # installs CLT if not already present
+
+# Install Node.js 20 via Homebrew (recommended):
+brew install node@20
+echo 'export PATH="/opt/homebrew/opt/node@20/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+node --version             # should print v20.x.x
+
+# Clone the repository
+git clone https://github.com/CyberBrainiac1/TerminalPilot.git
+cd TerminalPilot
+
+# Install dependencies
+npm install --legacy-peer-deps
+
+# Run in development mode (hot reload)
+npm run dev
+
+# — OR — build a distributable DMG:
+npm run make:mac
+# Output: dist/TerminalPilot-AI-*.dmg
+```
+
+---
+
+### 🔑 First-Run Setup
+
+After launching TerminalPilot AI for the first time a welcome wizard runs entirely in the app window and asks you to:
+
+1. **Choose your default shell** — auto-detected from your system (PowerShell, bash, zsh, CMD, etc.)
+2. **Choose your AI provider** — OpenAI, Anthropic Claude, OpenRouter, Google Gemini, or Ollama (local, no key needed)
+3. **Enter your API key** — stored securely in the OS keychain, never written to disk as plain text
+
+You can skip the API key step and add or change it later via **Settings → AI** (`Ctrl+,`).
+
+---
+
+## Features
+
+- **PowerShell-style terminal** — classic `#012456` blue theme, Campbell color scheme, block cursor
+- **AI chat sidebar** — always visible on the right; supports 5 providers (see below)
+- **Multiple AI providers** — switch between OpenAI, Anthropic, OpenRouter, Google Gemini, and local Ollama in Settings
+- **OpenRouter support** — access 100+ models (GPT-4o, Claude, Llama, Mistral, Phi-3) via a single API key
+- **Real terminal emulator** — PTY-backed via `node-pty`; supports PowerShell, CMD, Git Bash, WSL, bash, zsh, fish
+- **Multiple tabs** with shell profile switching
+- **SSH session management** — key / password / agent auth, saved profiles
+- **Command proposal + approval** — AI suggests commands, you approve / edit / reject before they run
+- **Risk scanning** — color-coded risk levels (safe / moderate / high / critical)
+- **Secret redaction** — API keys and tokens stripped before sending output to AI
+- **Secure key storage** — OS keychain via `keytar`; keys are never stored as plain text
+
+---
+
+## AI Providers
+
+Switch providers any time in **Settings → AI** (`Ctrl+,`):
+
+| Provider | Icon | Key format | Notes |
+|---|---|---|---|
+| OpenAI | 🔮 | `sk-...` | GPT-4o, GPT-4o Mini, GPT-3.5 Turbo |
+| Anthropic Claude | 🧠 | `sk-ant-...` | Claude 3.5 Sonnet, Haiku, Opus |
+| OpenRouter | 🌐 | `sk-or-v1-...` | 100+ models; one key for all |
+| Google Gemini | ✨ | `AIza...` | Gemini 2.0 Flash, 1.5 Pro/Flash |
+| Ollama (local) | 🦙 | *(none)* | Runs on your machine — no cloud, no key |
+
+Each provider stores its key independently in the keychain — you can configure multiple at once and switch freely.
+
+---
 
 ## Configuration
 
-### API Key
+### Changing AI Provider or Key
 
-On first launch, the welcome screen prompts for your OpenAI API key. It is stored securely in the OS keychain (never written to disk as plain text).
-
-You can also set/change/clear it via **Settings → AI**.
+Open **Settings → AI** (`Ctrl+,`), click a provider pill, then enter your key and click **Save**.
 
 ### Shell Profiles
 
 The app auto-detects available shells on startup:
-- **Windows:** PowerShell, PowerShell 7, CMD, Git Bash, WSL
+- **Windows:** PowerShell 5, PowerShell 7, CMD, Git Bash, WSL
 - **Linux/macOS:** bash, zsh, fish, sh
 
-Custom profiles can be added in Settings.
+Custom profiles can be added in **Settings → Terminal**.
 
 ### SSH Profiles
 
 Add SSH connection profiles in **Settings → SSH**. Supports:
 - Private key authentication
-- Password authentication (password never stored in plain text)
+- Password authentication (never stored in plain text)
 - SSH agent forwarding
 
-## AI Features
-
-The AI sidebar (toggle with `🤖` button or `Ctrl+Shift+A`) provides:
-
-- **Free-form chat** about your terminal, errors, and workflows
-- **Command proposals** — AI suggests commands in `bash`/`powershell` code blocks
-- **Approval workflow** — every proposed command shows an approval card with:
-  - Risk level badge (green/yellow/orange/red)
-  - ▶ Run, ✏️ Edit, 📋 Copy, ✕ Reject buttons
-  - Extra confirmation for high-risk commands
-- **Include recent output** — checkbox to attach last 50 lines of terminal output for context
-- **Automatic secret redaction** — sensitive patterns stripped before any output is sent to AI
-
-## Architecture
-
-```
-src/
-  main/              # Electron main process (Node.js)
-    terminal/        # PTY management, shell profiles, output capture
-    ssh/             # SSH session management (ssh2)
-    ai/              # AI provider, prompt builder, approval manager
-    security/        # Risk analyzer, secret redactor
-    storage/         # Secure keychain storage, settings persistence
-    ipc/             # IPC handler registrations
-    models/          # Shared TypeScript interfaces
-  preload/           # contextBridge IPC API exposed to renderer
-  renderer/src/      # React 18 frontend
-    components/      # UI components
-    stores/          # Zustand state (terminal tabs, AI chat, settings)
-    hooks/           # useTerminal, useAI, useSettings
-    types/           # Frontend type definitions + window.electronAPI types
-```
+---
 
 ## Keyboard Shortcuts
 
@@ -132,6 +218,32 @@ src/
 | `Ctrl+,` | Settings |
 | `Ctrl+Shift+A` | Toggle AI sidebar |
 | `Ctrl+C` | Copy / Interrupt process |
+| `Ctrl+Shift+C` | Copy selection |
+| `Ctrl+Shift+V` | Paste |
+
+---
+
+## Architecture
+
+```
+src/
+  main/              # Electron main process (Node.js)
+    terminal/        # PTY management, shell profiles, output capture
+    ssh/             # SSH session management (ssh2)
+    ai/              # AI provider (OpenAI/Anthropic/OpenRouter/Gemini/Ollama)
+    security/        # Risk analyzer, secret redactor
+    storage/         # Secure keychain storage, settings persistence
+    ipc/             # IPC handler registrations
+    models/          # Shared TypeScript interfaces
+  preload/           # contextBridge IPC API exposed to renderer
+  renderer/src/      # React 18 frontend (PowerShell blue theme)
+    components/      # UI components (SidebarChat, SettingsDialog, TerminalPane…)
+    stores/          # Zustand state (terminal tabs, AI chat, settings)
+    hooks/           # useTerminal, useAI, useSettings
+    types/           # Frontend type definitions + window.electronAPI types
+```
+
+---
 
 ## License
 
