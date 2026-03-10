@@ -65,9 +65,13 @@ export interface SessionContext {
   recentOutput?: string;
 }
 
+export type AIProviderType = 'openai' | 'anthropic' | 'openrouter' | 'gemini' | 'ollama';
+
 export interface AppSettings {
-  aiProvider: string;
+  aiProvider: AIProviderType;
   aiModel: string;
+  ollamaBaseUrl: string;
+  openrouterBaseUrl: string;
   defaultShellProfileId: string;
   theme: 'dark' | 'light' | 'system';
   fontSize: number;

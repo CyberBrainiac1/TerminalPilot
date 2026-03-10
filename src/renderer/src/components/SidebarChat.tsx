@@ -5,9 +5,13 @@ import { useSettingsStore } from '../stores/settingsStore'
 import { ChatMessage } from './ChatMessage'
 import { SessionBadge } from './SessionBadge'
 
+const PROVIDER_ICONS: Record<string, string> = {
+  openai: '🔮', anthropic: '🧠', openrouter: '🌐', gemini: '✨', ollama: '🦙',
+}
+
 const SUGGESTIONS = [
   'Explain the last command',
-  "What went wrong?",
+  'What went wrong?',
   'How do I fix this error?',
   'Summarize recent output',
   'Help me set up a project',
@@ -16,12 +20,13 @@ const SUGGESTIONS = [
 export function SidebarChat() {
   const { messages, isLoading, clearChat, sendMessage } = useAI()
   const { tabs } = useTerminalStore()
-  const { isConfigured } = useSettingsStore()
+  const { isConfigured, settings } = useSettingsStore()
   const [input, setInput] = useState('')
   const [includeOutput, setIncludeOutput] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const activeTab = tabs.find((t) => t.isActive)
+  const providerIcon = PROVIDER_ICONS[settings.aiProvider] ?? '🤖'
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -44,19 +49,23 @@ export function SidebarChat() {
   return (
     <div className="flex flex-col h-full bg-[var(--bg-sidebar)] border-l border-[var(--border-color)]">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-color)] shrink-0">
-        <span className="text-[var(--accent)] font-semibold text-sm">🤖 AI Pilot</span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-color)] shrink-0 bg-[var(--bg-tertiary)]">
+        <div className="flex items-center gap-1.5">
+          <span className="text-base leading-none">{providerIcon}</span>
+          <span className="text-[var(--accent)] font-semibold text-sm">AI Pilot</span>
+          <span className="text-[var(--text-muted)] text-xs ml-1">{settings.aiProvider}</span>
+        </div>
         <div className="flex items-center gap-2">
           {activeTab && <SessionBadge tab={activeTab} compact />}
           <button
             onClick={clearChat}
-            className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] px-1.5 py-1 rounded hover:bg-[var(--bg-tertiary)]"
+            className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] px-1.5 py-1 rounded hover:bg-[var(--bg-secondary)]"
             title="Clear chat"
           >🗑</button>
         </div>
       </div>
 
-      {!isConfigured && (
+      {!isConfigured && settings.aiProvider !== 'ollama' && (
         <div className="mx-3 mt-3 px-3 py-2 bg-yellow-900/20 border border-yellow-700/50 rounded text-xs text-yellow-300">
           ⚠ API key not set. Open Settings → AI to configure.
         </div>

@@ -7,6 +7,8 @@ import { getDefaultShellProfiles } from '../terminal/shellProfiles';
 const DEFAULT_SETTINGS: AppSettings = {
   aiProvider: 'openai',
   aiModel: 'gpt-4o',
+  ollamaBaseUrl: 'http://localhost:11434/v1',
+  openrouterBaseUrl: 'https://openrouter.ai/api/v1',
   defaultShellProfileId: '',
   theme: 'dark',
   fontSize: 14,

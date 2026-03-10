@@ -56,6 +56,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
       ipcRenderer.invoke('ai:clearApiKey'),
     isConfigured: () =>
       ipcRenderer.invoke('ai:isConfigured'),
+    setProviderKey: (provider: string, key: string) =>
+      ipcRenderer.invoke('ai:setProviderKey', provider, key),
+    clearProviderKey: (provider: string) =>
+      ipcRenderer.invoke('ai:clearProviderKey', provider),
+    isProviderConfigured: (provider: string) =>
+      ipcRenderer.invoke('ai:isProviderConfigured', provider),
     approveCommand: (requestId: string, editedCommand?: string) =>
       ipcRenderer.invoke('ai:approveCommand', requestId, editedCommand),
     rejectCommand: (requestId: string) =>

@@ -99,9 +99,7 @@ export function registerHandlers(mainWindow: BrowserWindow): void {
   ipcMain.handle('ai:chat', async (_, messages: ChatMessage[], context: SessionContext) => {
     try {
       const settings = loadSettings();
-      const chunks: string[] = [];
       const fullResponse = await aiProvider.chat(messages, context, settings, (chunk) => {
-        chunks.push(chunk);
         mainWindow.webContents.send('ai:chunk', chunk);
       });
       return { success: true, response: fullResponse };
@@ -110,9 +108,34 @@ export function registerHandlers(mainWindow: BrowserWindow): void {
     }
   });
 
+  // Per-provider key management
+  ipcMain.handle('ai:setProviderKey', async (_, provider: string, key: string) => {
+    try {
+      await aiProvider.setApiKey(provider as import('../models/types').AIProviderType, key);
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: String(err) };
+    }
+  });
+
+  ipcMain.handle('ai:clearProviderKey', async (_, provider: string) => {
+    try {
+      await aiProvider.clearApiKey(provider as import('../models/types').AIProviderType);
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: String(err) };
+    }
+  });
+
+  ipcMain.handle('ai:isProviderConfigured', async (_, provider: string) => {
+    return aiProvider.isProviderConfigured(provider as import('../models/types').AIProviderType);
+  });
+
+  // Legacy shims — delegate to the active provider from settings
   ipcMain.handle('ai:setApiKey', async (_, key: string) => {
     try {
-      await aiProvider.setApiKey(key);
+      const settings = loadSettings();
+      await aiProvider.setApiKey(settings.aiProvider, key);
       return { success: true };
     } catch (err) {
       return { success: false, error: String(err) };
@@ -121,7 +144,8 @@ export function registerHandlers(mainWindow: BrowserWindow): void {
 
   ipcMain.handle('ai:clearApiKey', async () => {
     try {
-      await aiProvider.clearApiKey();
+      const settings = loadSettings();
+      await aiProvider.clearApiKey(settings.aiProvider);
       return { success: true };
     } catch (err) {
       return { success: false, error: String(err) };
@@ -129,7 +153,8 @@ export function registerHandlers(mainWindow: BrowserWindow): void {
   });
 
   ipcMain.handle('ai:isConfigured', async () => {
-    return aiProvider.isConfigured();
+    const settings = loadSettings();
+    return aiProvider.isConfigured(settings.aiProvider);
   });
 
   ipcMain.handle('ai:approveCommand', async (_, requestId: string, editedCommand?: string) => {

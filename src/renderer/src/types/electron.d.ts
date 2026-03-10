@@ -32,6 +32,9 @@ interface ElectronAPI {
     setApiKey: (key: string) => Promise<void>;
     clearApiKey: () => Promise<void>;
     isConfigured: () => Promise<boolean>;
+    setProviderKey: (provider: string, key: string) => Promise<void>;
+    clearProviderKey: (provider: string) => Promise<void>;
+    isProviderConfigured: (provider: string) => Promise<boolean>;
     approveCommand: (requestId: string, editedCommand?: string) => Promise<void>;
     rejectCommand: (requestId: string) => Promise<void>;
     onChunk: (cb: (chunk: string) => void) => void;
